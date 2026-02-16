@@ -14,16 +14,21 @@ class PublisherNode(Node):
             self.message_topic,
             10)
 
-        msg = String()
-        msg.data = "Hello, ROS2!"
-        self.message_publisher.publish(msg)
+        self.declare_parameter('string', 'Hello, ROS2!')
+        self.declare_parameter('rate_hz', 1.0)
 
-        self.timer = self.create_timer(1, lambda: self.message_publisher.publish(msg))
+        self.rate_hz = float(self.get_parameter('rate_hz').value)
+        self.timer = self.create_timer(1.0 / self.rate_hz, self.publish_message)
+
+
+        self.timer = self.create_timer(1, lambda: self.publish_message())
 
     def publish_message(self):
+        text = self.get_parameter('string').value
         msg = String()
-        msg.data = "Hello, ROS2!"
+        msg.data = str(text)
         self.message_publisher.publish(msg)
+        self.get_logger().info(msg.data + " published.")
 
 
 

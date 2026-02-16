@@ -7,7 +7,7 @@ from std_msgs.msg import String
 class ReceiverNode(Node):
     def __init__(self):
         super().__init__('receiver')
-        self.message_topic = '/spgc/sender'
+        self.message_topic = '/spgc/receiver'
 
         self.image_subscription = self.create_subscription(
             String,
